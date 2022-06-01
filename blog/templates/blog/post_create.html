@@ -1,0 +1,13 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+{% load crispy_forms_tags %}  
+<h2>POST CREATE PAGE</h2>
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form | crispy}}
+    <input type="submit" value="Create">
+</form>
+
+{% endblock content %}
+    
