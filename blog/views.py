@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from .models import Post
+from .models import Post, Like
 from .forms import PostForm
 
 def post_list(request):
@@ -48,9 +48,35 @@ def post_delete(request, id):
 @login_required(login_url='/users/login/')
 def post_detail(request, id):        
     post = Post.objects.get(id=id)
+    user = request.user
+    like = Like.objects.filter(post=id, user=user.id)
+    lcount = Like.objects.filter(post=id).count()
+    if request.POST:
+        try:
+            test = Like.objects.get(post_id=id,user_id=user.id)
+        except:
+            test = None
+        if not test:
+            murat = Like.objects.create(post_id=id,user_id=user.id) 
+            print("murat")
+            murat.save()
+            
+        else:
+            test.delete()
+            
+            
+
+        
+
     context = {
-        'post': post
+        'post': post,
+        'user': user,
+        'like': like,
+        'lcount': lcount
     }
     return render(request, 'blog/post_detail.html', context)
+
+
+
     
 

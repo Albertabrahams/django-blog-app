@@ -8,6 +8,18 @@
       <p class="card-text">{{post.content}}</p>
       <p class="card-text"><small class="text-muted">Last updated {{post.last_updated}}</small></p>
     </div>
+    <form action="{% url 'detail' post.id %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="post_id" value="{{ post.id }}" >
+      
+      {% if not like  %}
+        <button type="submit" class="btn btn-success">Like</button>
+      {% else %}
+        <button type="submit" class="btn btn-danger">Unlike</button>
+      {% endif %}
+      <strong>{{lcount}} Like</strong>
+
+    </form>
   </div>
     
     <a href="{% url 'update' post.id %}"><button class="btn btn-primary">Edit</button></a>

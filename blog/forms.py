@@ -7,4 +7,4 @@ class PostForm(forms.ModelForm):
 
         model = Post
         fields = '__all__'
-        widgets = { 'poster': forms.Select(attrs={'disabled':'disabled'})}
+
