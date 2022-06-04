@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from .models import Post, Like
-from .forms import PostForm
+from .forms import PostForm, CommentForm
 
 def post_list(request):
     posts = Post.objects.all()
@@ -51,6 +51,8 @@ def post_detail(request, id):
     user = request.user
     like = Like.objects.filter(post=id, user=user.id)
     lcount = Like.objects.filter(post=id).count()
+    form = CommentForm()
+
     if request.POST:
         try:
             test = Like.objects.get(post_id=id,user_id=user.id)
@@ -58,12 +60,20 @@ def post_detail(request, id):
             test = None
         if not test:
             murat = Like.objects.create(post_id=id,user_id=user.id) 
-            print("murat")
-            murat.save()
-            
+            murat.save()    
         else:
             test.delete()
+
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save()
+            comment.user_id = user.id
+            comment.post_id = post.id
+            comment.save()
             
+            return redirect("home")
+            
+    
             
 
         
@@ -72,7 +82,8 @@ def post_detail(request, id):
         'post': post,
         'user': user,
         'like': like,
-        'lcount': lcount
+        'lcount': lcount,
+        'form': form,
     }
     return render(request, 'blog/post_detail.html', context)
 

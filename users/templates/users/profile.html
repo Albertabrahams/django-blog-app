@@ -4,7 +4,7 @@
 <h2>Profile Form</h2>
 <br>
 
-<img src="{{ username.avatar.url }}" alt="image" width="100px" height="100px" style="border-radius: 50%; ;"> <h3 style="display: inline">{{user}}</h3>
+<img src="{{ user.avatar.url }}" alt="image" width="100px" height="100px" style="border-radius: 50%; ;"> <h3 style="display: inline">{{user}}</h3>
 <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %} 
     {{ form | crispy }}

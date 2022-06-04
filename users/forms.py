@@ -15,4 +15,4 @@ class ProfileForm(forms.ModelForm):
 
         model = Profile
         fields = '__all__'
-        widgets = { 'username': forms.Select(attrs={'disabled':'disabled'})}
+        # widgets = { 'username': forms.Select(attrs={'disabled':'disabled'})}

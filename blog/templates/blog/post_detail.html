@@ -18,6 +18,13 @@
         <button type="submit" class="btn btn-danger">Unlike</button>
       {% endif %}
       <strong>{{lcount}} Like</strong>
+      <hr><br>
+      {% load crispy_forms_tags %}  
+      <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form | crispy}}
+        <input type="submit" value="Make a Comment">
+      </form>
 
     </form>
   </div>

@@ -1,6 +1,11 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+class Category(models.Model):
+    name= models.CharField(max_length=50)
+
+    def _str_(self):
+        return self.name
 class Post(models.Model):
     poster = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True)
     title = models.CharField(max_length=50)
@@ -16,4 +21,9 @@ class Post(models.Model):
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+class Comments(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True)
+    comment = models.TextField(null=True, blank=True)
 
