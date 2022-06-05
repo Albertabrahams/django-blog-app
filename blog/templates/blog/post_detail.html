@@ -8,7 +8,7 @@
       <p class="card-text">{{post.content}}</p>
       <p class="card-text"><small class="text-muted">Last updated {{post.last_updated}}</small></p>
     </div>
-    <form action="{% url 'detail' post.id %}" method="post">
+    <form action="{% url 'like' post.id %}" method="post">
       {% csrf_token %}
       <input type="hidden" name="post_id" value="{{ post.id }}" >
       
@@ -18,15 +18,32 @@
         <button type="submit" class="btn btn-danger">Unlike</button>
       {% endif %}
       <strong>{{lcount}} Like</strong>
+    </form>
+
       <hr><br>
       {% load crispy_forms_tags %}  
-      <form action="" method="POST" enctype="multipart/form-data">
+      <form action="{% url 'comment' post.id %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{form | crispy}}
         <input type="submit" value="Make a Comment">
+      <hr><br>
+      <h2>COMMENTS</h2>
+      <hr><br>
+      {% for comment in comments %}
+      <div class="course-br">
+        <div  class="course-title">
+            <h4>{{comment.user}}</a></h4>
+        </div>
+        <div class="course-desc">
+            <p>{{comment.comment | truncatechars:100 }}</p>
+        </div>
+      </div>
+      <hr>
+      {% endfor %}
+        
       </form>
 
-    </form>
+    
   </div>
     
     <a href="{% url 'update' post.id %}"><button class="btn btn-primary">Edit</button></a>

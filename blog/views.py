@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from .models import Post, Like
+from .models import Post, Like, Comments
 from .forms import PostForm, CommentForm
 
 def post_list(request):
@@ -52,8 +52,24 @@ def post_detail(request, id):
     like = Like.objects.filter(post=id, user=user.id)
     lcount = Like.objects.filter(post=id).count()
     form = CommentForm()
+    comments = Comments.objects.all().filter(post_id=id)
+    
+    context = {
+        'post': post,
+        'user': user,
+        'like': like,
+        'lcount': lcount,
+        'form': form,
+        'comments':comments
+    }
+    return render(request, 'blog/post_detail.html', context)
 
+
+def post_like(request,id):
+    user = request.user
     if request.POST:
+        print(request.POST)
+        print(id)
         try:
             test = Like.objects.get(post_id=id,user_id=user.id)
         except:
@@ -63,31 +79,16 @@ def post_detail(request, id):
             murat.save()    
         else:
             test.delete()
+    return redirect("detail", id=id)
 
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save()
-            comment.user_id = user.id
-            comment.post_id = post.id
-            comment.save()
-            
-            return redirect("home")
-            
-    
-            
-
-        
-
-    context = {
-        'post': post,
-        'user': user,
-        'like': like,
-        'lcount': lcount,
-        'form': form,
-    }
-    return render(request, 'blog/post_detail.html', context)
-
-
-
-    
-
+def post_comment(request, id):
+    user = request.user
+    print("murat")
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save()
+        comment.user_id = user.id
+        comment.post_id = id
+        comment.save()
+    return redirect("detail", id=id)
+             

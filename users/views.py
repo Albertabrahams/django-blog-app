@@ -40,10 +40,14 @@ def user_login(request):
 @login_required(login_url="/users/login/")
 def profile(request, id):
     user = Profile.objects.get(id=id)
-    form = ProfileForm(request.POST or None, request.FILES or None, instance=user)
-    if form.is_valid():
-        form.save()
-        return redirect("profile", id)
+    form = ProfileForm(instance=user)
+    if request.POST:
+        form = ProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            comment = form.save()
+            comment.username_id = user.id
+            comment.save()
+            return redirect("profile", id)
     context = { 'form':form,
                 'user': user}
 
