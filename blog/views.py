@@ -10,17 +10,24 @@ def post_list(request):
     return render(request,'blog/post_list.html', context)
 
 def post_create(request):
+    user = request.user
     form = PostForm(request.POST or None)
+ 
+    
     if form.is_valid():
         student = form.save()
+        student.poster_id = user.id
+        
+        
         
         if 'image' in request.FILES:
             student.image = request.FILES.get('image')
             student.save()
+        student.save()
         return redirect('home')
 
     context = {
-        'form' : form
+        'form' : form,
     }
     return render(request,'blog/post_create.html', context)
 
@@ -81,7 +88,7 @@ def post_like(request,id):
 
 def post_comment(request, id):
     user = request.user
-    
+
     form = CommentForm(request.POST)
     if form.is_valid():
         comment = form.save()

@@ -46,7 +46,10 @@
     
   </div>
     
+    
+    {% if user.id == post.poster_id %}
+      
     <a href="{% url 'update' post.id %}"><button class="btn btn-primary">Edit</button></a>
     <a href="{% url 'delete' post.id %}"><button class="btn btn-danger">Delete</button></a>
-
+    {% endif %}
 {% endblock content %}
