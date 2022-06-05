@@ -68,22 +68,20 @@ def post_detail(request, id):
 def post_like(request,id):
     user = request.user
     if request.POST:
-        print(request.POST)
-        print(id)
         try:
-            test = Like.objects.get(post_id=id,user_id=user.id)
+            test = Like.objects.get(post_id=id, user_id=user.id)
         except:
             test = None
         if not test:
-            murat = Like.objects.create(post_id=id,user_id=user.id) 
-            murat.save()    
+            halil = Like.objects.create(post_id=id, user_id=user.id) 
+            halil.save()    
         else:
             test.delete()
     return redirect("detail", id=id)
 
 def post_comment(request, id):
     user = request.user
-    print("murat")
+    
     form = CommentForm(request.POST)
     if form.is_valid():
         comment = form.save()
